@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        lorem   
+        
+        <f:event type="preRenderView" listener="#{controladorCli.cargarClientes()}"/>
+        
+        <h:form>
+    <p:dataTable var="car" value="#{dtPaginatorView.cars}" rows="10"
+                         paginator="true"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="5,10,15">
+        <p:column headerText="Id">
+            <h:outputText value="#{car.id}" />
+        </p:column>
+ 
+        <p:column headerText="Year">
+            <h:outputText value="#{car.year}" />
+        </p:column>
+ 
+        <p:column headerText="Brand">
+            <h:outputText value="#{car.brand}" />
+        </p:column>
+ 
+        <p:column headerText="Color">
+            <h:outputText value="#{car.color}" />
+        </p:column>
+         
+        <f:facet name="paginatorTopLeft">
+            <p:commandButton type="button" icon="fa fa-sync" />
+        </f:facet>
+ 
+        <f:facet name="paginatorBottomRight">
+            <p:commandButton type="button" icon="fa fa-cloud-upload" />
+        </f:facet>
+    </p:dataTable>
+</h:form>
+        <!--
+        <h:form id="frmIngreso">
+
+            <p:outputLabel for="txtId" value="Id:" />
+            <p:inputText id="txtId" value="#{controladorCli.cliente.id}"/>
+            <br/>
+            <p:outputLabel for="txtNombre" value="Nombre:"/>
+            <p:inputText id="txtNombre" value="#{controladorCli.cliente.nombre}"/>
+            <br/>
+            <p:outputLabel for="txtApellido" value="Apellido"/>
+            <p:inputText id="txtApellido" value="#{controladorCli.cliente.apellido}"/>
+            <br/>
+            <p:outputLabel for="txtNit" value="Nit:"/>
+            <p:inputText id="txtNit" value="#{controladorCli.cliente.nit}"/>
+            <br/>
+            <p:commandButton actionListener="#{controladorCli.guardarCliente()}" value="Guardar" update=":frmMiTabla:tblClientes" />
+            <br/>
+
+        </h:form>
+        -->
+
+    </h:body>
+</html>
+

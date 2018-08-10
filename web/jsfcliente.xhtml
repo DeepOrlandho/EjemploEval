@@ -1,0 +1,239 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+
+
+    <h:head>
+        <title>Control clientes</title>
+
+    </h:head>
+
+    <h:body>
+
+        <h:form>  
+            <p:growl id="messages"/>
+
+            <p:menubar>
+                <p:submenu label="File" icon="ui-icon-document">
+                    <p:submenu label="New" icon="ui-icon-contact">
+                        <p:menuitem value="Project" url="#" />
+                        <p:menuitem value="Other" url="#" />
+                    </p:submenu>
+                    <p:menuitem value="Open" url="#" />
+                    <p:separator />
+                    <p:menuitem value="Quit" url="#" />
+                </p:submenu>
+
+                <p:submenu label="Edit" icon="ui-icon-pencil">
+                    <p:menuitem value="Undo" url="#" icon="ui-icon-arrowreturnthick-1-w" />
+                    <p:menuitem value="Redo" url="jsfAgregarUsuarios" icon="ui-icon-arrowreturnthick-1-e" />
+                </p:submenu>
+
+                <p:submenu label="Help" icon="ui-icon-help">
+                    <p:menuitem value="Contents" url="#" />
+                    <p:submenu label="Search" icon="ui-icon-search">
+                        <p:submenu label="Text">
+                            <p:menuitem value="Workspace" url="#" />
+                        </p:submenu>
+                        <p:menuitem value="File" url="#" />
+                    </p:submenu>
+                </p:submenu>
+
+                <p:submenu label="Actions" icon="ui-icon-gear">
+                    <p:submenu label="Ajax" icon="ui-icon-refresh">
+                        <p:menuitem value="Save" actionListener="#{menuView.save}" icon="ui-icon-disk" update="messages"/>
+                        <p:menuitem value="Update" actionListener="#{menuView.update}" icon="ui-icon-arrowrefresh-1-w" update="messages"/>
+                    </p:submenu>
+                    <p:submenu label="Non-Ajax" icon="ui-icon-newwin">
+                        <p:menuitem value="Delete" actionListener="#{menuView.delete}" icon="ui-icon-close" update="messages" ajax="false"/>
+                    </p:submenu>
+                </p:submenu>
+
+                <p:menuitem value="Quit" url="http://www.primefaces.org" icon="ui-icon-close" />
+
+                <f:facet name="options">
+                    <p:inputText style="margin-right:10px" placeholder="Search"/>
+                    <p:commandButton type="button" value="Logout" icon="ui-icon-extlink" />
+                </f:facet>
+            </p:menubar>
+        </h:form>
+        <br/>
+        <f:event type="preRenderView" listener="#{controladorCli.cargarClientes()}" id="cargar" />
+
+
+        <!--INGRESAR DATOS-->
+
+        <div class=" ui-md-6 ui-md-6 ui-lg-3" style="alignment-adjust: auto">
+            <p:panel id="ingresar" header="Ingresar Cliente" footer="Client Register" style="margin-bottom:20px" >
+                <h:panelGrid columns="2">
+                    <h:form id="frmIngreso">
+                        <script>
+                            function limpiarForm(){
+                                document.getElementById("frmIngreso").reset();
+                            }
+                        </script>
+                        
+                        <p:outputLabel for="txtId" value="Id:"/>
+                        <h:inputText id="txtId" value="#{controladorCli.cliente.id}"/>
+                        <br/>
+
+                        <p:outputLabel for="txtNombre" value="Nombre:"/>
+                        <h:inputText id="txtNombre" value="#{controladorCli.cliente.nombre}"/>  
+                        <br/>
+
+                        <p:outputLabel for="txtApellido" value="Apellido"/>
+                        <h:inputText id="txtApellido" value="#{controladorCli.cliente.apellido}"/>
+                        <br/>
+
+
+                        <p:outputLabel for="txtNit" value="Nit:"/>
+                        <h:inputText id="txtNit" value="#{controladorCli.cliente.nit}"/>  
+                        <br/>
+
+                        <p:commandButton actionListener="#{controladorCli.guardarCliente()}" value="Guardar" update=":frmMiTabla:tblClientes :frmNuevo" oncomplete="limpiarForm()"/>
+                    </h:form>
+                </h:panelGrid>
+            </p:panel>
+        </div>
+
+
+        <br/>
+        
+        
+        <!--TABLA CON CLIENTES-->
+        <h:form id="frmMiTabla">
+            <p:dataTable var="misdatos" value="#{controladorCli.listaCliente}" id="tblClientes" rows="5" 
+                         paginator="true"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="5,10,15">
+                <p:column headerText="Id">
+                    <h:outputText value="#{misdatos.id}" />
+                </p:column>
+
+                <p:column headerText="Nombre">
+                    <h:outputText value="#{misdatos.nombre}" />
+                </p:column>
+
+                <p:column headerText="Apellido">
+                    <h:outputText value="#{misdatos.apellido}" />
+                </p:column>
+
+                <p:column headerText="Nit">
+                    <h:outputText value="#{misdatos.nit}" />
+                </p:column>
+
+                <p:column headerText="Acciones">
+                    <p:commandButton value="Modificar" actionListener="#{controladorCli.buscarCodigoCliente(misdatos)}" oncomplete="PF('dlgActualizar').show();" update=":emergente" />
+
+
+                </p:column>
+
+                <f:facet name="paginatorTopLeft">
+                    <p:commandButton type="button" icon="fa fa-sync" />
+                </f:facet>
+
+                <f:facet name="paginatorBottomRight">
+                    <p:commandButton type="button" icon="fa fa-cloud-upload" />
+                </f:facet>
+
+            </p:dataTable>
+        </h:form>
+
+        <div class="ui-g">
+            <h:form id="frmNuevo">
+                <ui:repeat value="#{controladorCli.listaCliente}" var="datos" id="repetir">
+                    <div class="ui-g-12 ui-md-6 ui-lg-3">
+                        <p:panel id="basic" header="#{datos.nombre} #{datos.apellido}" footer="Movie Details" style="margin-bottom:20px; background-color: lightcyan" >
+                            <h:panelGrid columns="2" cellpadding="10">
+                                <p:outputLabel value="#{datos.nit}"/>
+                                <br/>
+                                <p:outputLabel value="#{datos.apellido}"/>
+                            </h:panelGrid>
+                        </p:panel>
+                    </div>
+                </ui:repeat>
+            </h:form>
+
+
+
+        </div>
+
+        <p:dialog header="Actualizar datos" id="emergente" widgetVar="dlgActualizar" showEffect="explode" hideEffect="bounce" height="300" width="450">
+            <h:form>
+                <p:outputLabel for="txtIdA" value="Id:"/>
+                <p:inputText id="txtIdA" value="#{controladorCli.cliente.id}"/>
+                <br/>
+                <p:outputLabel for="txtNombreA" value="Nombre:"/>
+                <p:inputText id="txtNombreA" value="#{controladorCli.cliente.nombre}"/>
+                <br/>
+                <p:outputLabel for="txtApellidoA" value="Apellido:"/>
+                <p:inputText id="txtApellidoA" value="#{controladorCli.cliente.apellido}"/>
+                <br/>
+                <p:outputLabel for="txtNitA" value="Nit;"/>
+                <p:inputText id="txtNitA" value="#{controladorCli.cliente.nit}"/>
+                <br/>
+                <br/>
+                <p:commandButton actionListener="#{controladorCli.modificarCliente(controladorCli.cliente)}" value="Actualizar"  update=":frmMiTabla:tblClientes" oncomplete="PF('dlgActualizar').hide();"/>
+                <br/>
+                <br/>
+                <p:commandButton actionListener="#{controladorCli.eliminarCliente(controladorCli.cliente)}" value="Eliminar" update=":frmMiTabla:tblClientes" oncomplete="PF('dlgActualizar').hide();" />
+            </h:form>
+            <h:outputText value="This dialog has nice effects." />
+            <br/>
+
+        </p:dialog>
+
+
+
+
+        <p:dialog header="Eliminar Datos" id="dlgEliminarConf" widgetVar="dlgEliminarConf" showEffect="explode" hideEffect="bounce" height="100" width="300">
+            <h:outputText value="Se eliminarán los datos del Cliente!" />
+            <br/>
+            <br/>
+            <p:commandButton value="Confirmar" update=":frmMiTabla:tblClientes" oncomplete="PF('dlgEliminarConf').hide();" actionListener="#{controladorCli.eliminarCliente(controladorCli.cliente)}"/>
+        </p:dialog>
+
+
+
+        <br>
+        </br>
+
+        <f:event type="preRenderView" listener="#{controladorUsuario.cargarUsuarios()}"/>
+        Datos de tabla
+        <p:dataTable var="misdatosU" value="#{controladorUsuario.listaUsuario}">
+            <p:column headerText="Id">
+                <h:outputText value="#{misdatosU.id}" />
+            </p:column>
+
+            <p:column headerText="Nombre">
+                <h:outputText value="#{misdatosU.nombre}" />
+            </p:column>
+
+            <p:column headerText="Usuario">
+                <h:outputText value="#{misdatosU.usuario}" />
+            </p:column>
+
+            <p:column headerText="Contraseña">
+                <h:outputText value="#{misdatosU.contrasenia}" />
+            </p:column>
+
+            <p:column headerText="Acciones">
+                Actualizar, Eliminar 
+            </p:column>
+
+        </p:dataTable>
+        <h:form>
+            <h:commandLink action="/jsfAgregarUsuarios" value="Ir a la pagina"/>
+        </h:form>
+
+
+
+
+    </h:body>
+</html>
+
